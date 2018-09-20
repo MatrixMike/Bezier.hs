@@ -46,11 +46,11 @@ next dt world
 
 touched :: Event -> World -> World
 touched (EventKey (MouseButton LeftButton) Down _ p) world =
-  world {points = (points world) ++ [p]}
+  world {points = points world ++ [p]}
 touched (EventKey (SpecialKey KeyUp) Down _ _) world =
-  world {depth = (depth world) + 1}
+  world {depth = depth world + 1}
 touched (EventKey (SpecialKey KeyDown) Down _ _) world =
-  world {depth = (depth world) - 1}
+  world {depth = depth world - 1}
 touched (EventKey (Char 'v') Down _ _) world =
   world {verbose = not (verbose world)}
 touched (EventKey (SpecialKey KeySpace) Down _ _) world =
@@ -71,7 +71,7 @@ picture world =
     [ go blue red (depth world) (points world)
     , Color white $ Line $ c <$> ts
     , Color orange $
-      Pictures $ [Translate x y $ ThickCircle w r | (x, y) <- points world]
+      Pictures [Translate x y $ ThickCircle w r | (x, y) <- points world]
     , Color green $ Translate 0 200 $ Scale 0.3 0.3 $ Text $ printf "t=%.1f" t
     , Color red $ Translate cx cy $ ThickCircle w r
     ]
@@ -94,11 +94,11 @@ picture world =
            [ go' (init ps)
            , go' (tail ps)
            , Color lineColor $ Line [a t, b t]
-           , if (verbose world || d == 1 || length ps <= 3)
-               then (Color curveColor $ Line $ a <$> ts)
+           , if verbose world || d == 1 || length ps <= 3
+               then Color curveColor $ Line $ a <$> ts
                else Blank
-           , if (verbose world || d == 1 || length ps <= 3)
-               then (Color curveColor $ Line $ b <$> ts)
+           , if verbose world || d == 1 || length ps <= 3
+               then Color curveColor $ Line $ b <$> ts
                else Blank
            , Color lineColor $ Translate ax ay $ ThickCircle w r
            , Color lineColor $ Translate bx by $ ThickCircle w r
